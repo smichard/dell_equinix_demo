@@ -1,0 +1,32 @@
+# [START cloudbuild]
+steps:
+# This step builds the container image.
+- name: 'gcr.io/cloud-builders/docker'
+  id: Build
+  args:
+  - 'build'
+  - '-t'
+  - 'eu.gcr.io/tto-demo/k8s-demo-app:$BUILD_ID'
+  - '-t'
+  - 'eu.gcr.io/tto-demo/k8s-demo-app:latest'
+  - '.'
+
+# This step pushes the image to Container Registry
+# The PROJECT_ID and SHORT_SHA variables are automatically
+# replaced by Cloud Build.
+- name: 'gcr.io/cloud-builders/docker'
+  id: Push
+  args:
+  - 'push'
+  - 'eu.gcr.io/tto-demo/k8s-demo-app'
+
+# deploy container image to GKE
+- name: "gcr.io/cloud-builders/gke-deploy"
+  id: Deploy
+  args:
+  - run
+  - --filename=config/deployment.yml
+  - --location=europe-west3-a
+  - --cluster=tto-cluster
+
+# [END cloudbuild]
