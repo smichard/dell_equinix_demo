@@ -619,7 +619,8 @@ a:hover {
   padding: 0;
   height: 100%;
   width: 100%;
-  opacity: .9;
+  /*opacity: .9;*/
+  opacity: .05;
 }
 
 .intro .intro-title {
